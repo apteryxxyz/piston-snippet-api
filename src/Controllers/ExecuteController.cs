@@ -5,22 +5,34 @@ using Backend.Contexts;
 using Backend.Interfaces;
 namespace Backend.Controllers;
 
+/// <summary>
+/// Handles the snippets execute API endpoints.
+/// </summary>
 [ApiController]
 [Route("/api/snippets/{id}/execute")]
 public class ExecuteController : Controller
 {
+    private readonly IConfiguration _config;
     private readonly HttpClient _client;
     private readonly SnippetContext _context;
     private readonly ILogger<ExecuteController> _logger;
 
-    public ExecuteController(IHttpClientFactory clientFactory, SnippetContext context, ILogger<ExecuteController> logger)
+    public ExecuteController(IConfiguration config, IHttpClientFactory clientFactory, SnippetContext context, ILogger<ExecuteController> logger)
     {
+        // Initialise the execute controller with dependencies injected
+        _config = config ?? throw new ArgumentNullException(nameof(config));
         if (clientFactory is null) throw new ArgumentNullException(nameof(clientFactory));
         _client = clientFactory.CreateClient("piston");
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <summary>
+    /// Execute the code within a snippet.
+    /// </summary>
+    /// <param name="id">Snippet ID.</param>
+    /// <param name="key">API key.</param>
+    /// <returns>Execute result.</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,6 +58,9 @@ public class ExecuteController : Controller
         var response = await _client.PostAsync("execute", content);
         var responseBody = await response.Content.ReadAsStringAsync();
         var json = JsonSerializer.Deserialize<ExecuteResponse>(responseBody);
+
+        _logger.LogInformation($"EXECUTED snippet with ID {id}");
+        if (_config["Env"] == "Dev") _logger.LogInformation($"ID: {id} | Key {key}");
 
         if (json == null) return BadRequest();
         else if (json.message != null) return BadRequest();

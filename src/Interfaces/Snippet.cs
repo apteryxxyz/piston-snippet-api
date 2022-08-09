@@ -1,6 +1,9 @@
 ﻿using Backend.Models;
 namespace Backend.Interfaces;
 
+/// <summary>
+/// Class to represent incoming snippet data.
+/// </summary>
 public class SnippetIncoming
 {
     public string Language { get; set; } = default!;
@@ -10,6 +13,9 @@ public class SnippetIncoming
     public string[]? Arguments { get; set; }
 }
 
+/// <summary>
+/// SnippetIncoming class but all properties are 
+/// </summary>
 public class SnippetIncomingPartial
 {
     public string? Language { get; set; }
@@ -19,6 +25,9 @@ public class SnippetIncomingPartial
     public string[]? Arguments { get; set; }
 }
 
+/// <summary>
+/// Class representing the outgoing snippet data.
+/// </summary>
 public class SnippetOutgoing
 {
     public string Id { get; set; } = default!;
@@ -29,6 +38,12 @@ public class SnippetOutgoing
     public string? Input { get; set; }
     public string[]? Arguments { get; set; }
 
+    /// <summary>
+    /// This constructor takes a snippet model instance and
+    /// will convert it into an outgoing object.
+    /// </summary>
+    /// <param name="snippet">Snippet instance.</param>
+    /// <param name="includeKey">Whether to include the API key.</param>
     public SnippetOutgoing(Snippet snippet, bool includeKey)
     {
         if (snippet is null) return;

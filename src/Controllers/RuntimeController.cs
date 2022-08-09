@@ -2,18 +2,21 @@
 using Backend.Interfaces;
 namespace Backend.Controllers;
 
+/// <summary>
+/// Handles the runtimes API endpoints.
+/// </summary>
 [ApiController]
 [Route("/api/runtimes")]
 public class RuntimeController : Controller
 {
-    private readonly HttpClient _client;
-    private readonly ILogger<RuntimeController> _logger;
 
-    public RuntimeController(IHttpClientFactory clientFactory, ILogger<RuntimeController> logger)
+    private readonly HttpClient _client;
+
+    public RuntimeController(IHttpClientFactory clientFactory)
     {
+        // Initialise the runtime controller with dependencies injected
         if (clientFactory is null) throw new ArgumentNullException(nameof(clientFactory));
         _client = clientFactory.CreateClient("piston");
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>

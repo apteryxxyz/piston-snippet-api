@@ -1,6 +1,10 @@
 ﻿using Backend.Models;
 namespace Backend.Interfaces;
 
+/// <summary>
+/// Class to represent an request body object
+/// to the piston API execute endpoint.
+/// </summary>
 public class ExecuteRequest
 {
     public string language { get; set; } = default!;
@@ -27,6 +31,10 @@ public class ExecuteFile
     public string content { get; set; } = default!;
 }
 
+/// <summary>
+/// Class representing a response from the
+/// piston API execute endpoint.
+/// </summary>
 public class ExecuteResponse
 {
     public string? message { get; set; }
@@ -44,6 +52,10 @@ public class ExecuteRun
     public string output { get; set; } = default!;
 }
 
+/// <summary>
+/// A class representing the outgoing execute
+/// result object.
+/// </summary>
 public class ExecuteOutgoing
 {
     public string Language { get; set; } = default!;

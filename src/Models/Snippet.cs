@@ -1,5 +1,8 @@
 ﻿namespace Backend.Models;
 
+/// <summary>
+/// Database model for snippets.
+/// </summary>
 public class Snippet
 {
     public string Id { get; set; } = default!;

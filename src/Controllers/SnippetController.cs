@@ -11,12 +11,14 @@ namespace Backend.Controllers;
 [Route("/api/snippets")]
 public class SnippetController : Controller
 {
-    /** Database context */
+    private readonly IConfiguration _config;
     private readonly SnippetContext _context;
     private readonly ILogger<SnippetController> _logger;
 
-    public SnippetController(SnippetContext context, ILogger<SnippetController> logger)
+    public SnippetController(IConfiguration config, SnippetContext context, ILogger<SnippetController> logger)
     {
+        // Initialise the snippet controller with dependencies injected
+        _config = config ?? throw new ArgumentNullException(nameof(config));
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -50,7 +52,8 @@ public class SnippetController : Controller
         // Add the snippet to the database and save
         _context.Snippets.Add(snippet);
         await _context.SaveChangesAsync();
-        _logger.LogInformation("CREATED snippet with ID {id}", id);
+        _logger.LogInformation($"CREATED snippet with ID {id}");
+        if (_config["Env"] == "Dev") _logger.LogInformation($"ID: {id} | Key {key}");
 
         return CreatedAtAction(
             nameof(GetSnippet),
@@ -118,7 +121,8 @@ public class SnippetController : Controller
 
         // Save changes
         await _context.SaveChangesAsync();
-        _logger.LogInformation("UPDATED snippet with ID {id}", id);
+        _logger.LogInformation($"UPDATED snippet with ID {id}");
+        if (_config["Env"] == "Dev") _logger.LogInformation($"ID: {id} | Key {key}");
 
         // Response with the snippet
         return Ok(new SnippetOutgoing(snippet, false));
@@ -151,7 +155,8 @@ public class SnippetController : Controller
 
         // Save changes
         await _context.SaveChangesAsync();
-        _logger.LogInformation("DELETED snippet with ID {id}", id);
+        _logger.LogInformation($"DELETED snippet with ID {id}");
+        if (_config["Env"] == "Dev") _logger.LogInformation($"ID: {id} | Key {key}");
 
         // Response with the snippet
         return Ok(new SnippetOutgoing(snippet, false));

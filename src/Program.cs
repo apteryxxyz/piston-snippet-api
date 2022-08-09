@@ -3,16 +3,18 @@ using Backend.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Setup middlewares
-
+// Setup basic middlewares
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
 
+// Setup database context
 builder.Services.AddDbContext<SnippetContext>(opt =>
-    opt.UseInMemoryDatabase("Api"));
+    opt.UseInMemoryDatabase("Backend"));
+
+// Setup the http client for the piston engine API
 builder.Services.AddHttpClient("piston", configureClient: client =>
-    client.BaseAddress = new Uri("https://emkc.org/api/v2/piston/"));
+    client.BaseAddress = new Uri(builder.Configuration["PistonUri"]));
 
 var app = builder.Build();
 
@@ -23,5 +25,3 @@ app.UseAuthorization();
 app.UseHttpLogging();
 app.MapControllers();
 app.Run();
-
-public partial class Program { }

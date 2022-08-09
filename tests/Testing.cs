@@ -6,7 +6,7 @@ namespace Backend.Testing;
 public class Tests
 {
     private JsonNode _snippet = default!;
-    private HttpClient _client;
+    private HttpClient _client = default!;
 
     [SetUp]
     public void Setup()
