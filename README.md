@@ -35,7 +35,7 @@ cd tests && dotnet test
 ```
 
 Tests utilise the [NUnit](https://www.nunit.org/) testing framework.
-Each test is qa different method that will test the endpoints of the API,
+Each test is a different method that will test the endpoints of the API,
 in order.
 
 ![Dotnet run and test](./.github/two-terminals.png)
